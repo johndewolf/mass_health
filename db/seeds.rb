@@ -10,9 +10,13 @@ file_path = Rails.root.join'db/data/mass_health_data.csv'
 
 CSV.foreach(file_path, headers: true) do |row|
   row.each do |param|
-    param.to_s.gsub!(/[\$\,\s]/,'')
+    param[1].to_s.gsub!(/[\$\,\s]/,'')
+    if param.last.to_s.downcase == 'na'
+      param.pop
+      param << nil
+    end
   end
-  binding.pry
+
   town = HealthInfo.find_or_initialize_by(geography: row[0]) do |record|
     record[:geography] = row[0]
     record[:total_pop_year_2005] = row[1]
@@ -32,3 +36,4 @@ CSV.foreach(file_path, headers: true) do |row|
   end
   town.save
 end
+
