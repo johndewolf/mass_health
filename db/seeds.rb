@@ -36,4 +36,4 @@ CSV.foreach(file_path, headers: true) do |row|
   end
   town.save
 end
-
+HealthInfo.last.delete
